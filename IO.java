@@ -207,6 +207,7 @@ public class IO
 	public static void bufferCheck(RefByteArray buffer,int currentPos,int newPos,RefInt bufferSize)
 	{
 		// Note: Use RefByteArray.value instead of the original byte buffer after using the IO buffer write functions!
+		// The buffer needs to be trimmed using "trimBuffer" after usage to strip it of the excess allocated bytes!
 		if(bufferSize.value<=newPos)
 		{
 			bufferSize.value=newPos+BufferExtensionHeap;
@@ -219,6 +220,7 @@ public class IO
 	public static void writeInt8ToBuffer(RefByteArray buffer,byte i,RefInt pos,RefInt bufferSize)
 	{
 		// Note: Use RefByteArray.value instead of the original byte buffer after using the IO buffer write functions!
+		// The buffer needs to be trimmed using "trimBuffer" after usage to strip it of the excess allocated bytes!
 		bufferCheck(buffer,pos.value,pos.value+1,bufferSize);
 		writeInt8(buffer.value,i,pos);
 	}
@@ -226,6 +228,7 @@ public class IO
 	public static void writeInt16ToBuffer(RefByteArray buffer,short i,RefInt pos,RefInt bufferSize)
 	{
 		// Note: Use RefByteArray.value instead of the original byte buffer after using the IO buffer write functions!
+		// The buffer needs to be trimmed using "trimBuffer" after usage to strip it of the excess allocated bytes!
 		bufferCheck(buffer,pos.value,pos.value+2,bufferSize);
 		writeInt16(buffer.value,i,pos);
 	}
@@ -233,6 +236,7 @@ public class IO
 	public static void writeInt32ToBuffer(RefByteArray buffer,int i,RefInt pos,RefInt bufferSize)
 	{
 		// Note: Use RefByteArray.value instead of the original byte buffer after using the IO buffer write functions!
+		// The buffer needs to be trimmed using "trimBuffer" after usage to strip it of the excess allocated bytes!
 		bufferCheck(buffer,pos.value,pos.value+4,bufferSize);
 		writeInt32(buffer.value,i,pos);
 	}
@@ -240,6 +244,7 @@ public class IO
 	public static void writeInt64ToBuffer(RefByteArray buffer,long i,RefInt pos,RefInt bufferSize)
 	{
 		// Note: Use RefByteArray.value instead of the original byte buffer after using the IO buffer write functions!
+		// The buffer needs to be trimmed using "trimBuffer" after usage to strip it of the excess allocated bytes!
 		bufferCheck(buffer,pos.value,pos.value+8,bufferSize);
 		writeInt64(buffer.value,i,pos);
 	}
@@ -247,6 +252,7 @@ public class IO
 	public static void writeDoubleToBuffer(RefByteArray buffer,double i,RefInt pos,RefInt bufferSize)
 	{
 		// Note: Use RefByteArray.value instead of the original byte buffer after using the IO buffer write functions!
+		// The buffer needs to be trimmed using "trimBuffer" after usage to strip it of the excess allocated bytes!
 		bufferCheck(buffer,pos.value,pos.value+16,bufferSize);
 		writeDouble(buffer.value,i,pos);
 	}
@@ -254,6 +260,7 @@ public class IO
 	public static void writeFixedLengthDataToBuffer(RefByteArray buffer,byte[] data,RefInt pos,RefInt bufferSize)
 	{
 		// Note: Use RefByteArray.value instead of the original byte buffer after using the IO buffer write functions!
+		// The buffer needs to be trimmed using "trimBuffer" after usage to strip it of the excess allocated bytes!
 		bufferCheck(buffer,pos.value,pos.value+4+data.length,bufferSize);
 		writeFixedLengthData(buffer.value,data,pos);
 	}
@@ -261,7 +268,7 @@ public class IO
 	public static void writeZeroTerminatedDataToBuffer(RefByteArray buffer,byte[] data,RefInt pos,RefInt bufferSize)
 	{
 		// Note: Use RefByteArray.value instead of the original byte buffer after using the IO buffer write functions!
-		// Note: Use RefByteArray.value instead of the original byte buffer after using the IO buffer write functions!
+		// The buffer needs to be trimmed using "trimBuffer" after usage to strip it of the excess allocated bytes!
 		bufferCheck(buffer,pos.value,pos.value+1+data.length,bufferSize);
 		writeZeroTerminatedData(buffer.value,data,pos);
 	}
@@ -269,8 +276,17 @@ public class IO
 	public static void writeRawDataToBuffer(RefByteArray buffer,byte[] data,RefInt pos,RefInt bufferSize)
 	{
 		// Note: Use RefByteArray.value instead of the original byte buffer after using the IO buffer write functions!
+		// The buffer needs to be trimmed using "trimBuffer" after usage to strip it of the excess allocated bytes!
 		bufferCheck(buffer,pos.value,pos.value+data.length,bufferSize);
 		writeRawData(buffer.value,data,pos);
+	}
+	
+	public static byte[] trimBuffer(RefByteArray buffer,RefInt pos) // Strip buffer of excess allocated bytes.
+	{
+		int newSize=pos.value;
+		byte[] newBuffer=new byte[newSize];
+		System.arraycopy(buffer,0,newBuffer,0,newSize);
+		return newBuffer;
 	}
 	
 	public static void putInt8(byte[] buffer,byte i,int pos)
