@@ -285,7 +285,7 @@ public class IO
 	{
 		int newSize=pos.value;
 		byte[] newBuffer=new byte[newSize];
-		System.arraycopy(buffer,0,newBuffer,0,newSize);
+		System.arraycopy(buffer.value,0,newBuffer,0,newSize);
 		return newBuffer;
 	}
 	
